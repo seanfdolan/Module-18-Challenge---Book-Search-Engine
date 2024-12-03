@@ -22,12 +22,17 @@ const resolvers = {
             throw new AuthenticationError('Could not authenticate user.');
         }),
     },
-    users: () => __awaiter(void 0, void 0, void 0, function* () {
-        return yield User.find({});
-    }),
-    user: (_parent_1, _a) => __awaiter(void 0, [_parent_1, _a], void 0, function* (_parent, { username }) {
-        return User.findOne({ username }).populate('savedBooks');
-    }),
+    // users: () => [{ id: "1", name: "John Doe", email: "john@example.com" }],
+    // user: async (_parent: any, { username }: UserArgs) => {
+    //   return User.findOne({ username }).populate('savedBooks');
+    // }
+    // users: async () => {
+    //   return [{ id: "1", name: "Test User", email: "test@example.com" }];
+    // }
+    // users: async () => await User.find({}),
+    // users: async () => {
+    //   return await User.find({});
+    // },
     // users: async () => {
     //   try {
     //     const users = await User.find({});
@@ -40,6 +45,9 @@ const resolvers = {
     //       return await User.findOne({username: context.user.username}).populate('savedBooks');
     //     }
     //   },
+    //   users: () => __awaiter(void 0, void 0, void 0, function* () {
+    //     return yield User.find({});
+    // })
     Mutation: {
         // login: async (_parent: any, { email, password }: { email: string, password: string}) => {
         login: (_parent_1, _a) => __awaiter(void 0, [_parent_1, _a], void 0, function* (_parent, { email, password }) {
@@ -60,28 +68,28 @@ const resolvers = {
             // Return the token and the user
             return { token, user };
         }),
-    },
-    // addUser: async (_parent: any, { username, email, password }: { username: string, email: string, password: string }) => {
-    addUser: (_parent_1, _a) => __awaiter(void 0, [_parent_1, _a], void 0, function* (_parent, { input }) {
-        // Create a new user with the provided username, email, and password
-        const { username, email, password } = input;
-        const user = yield User.create({ username, email, password });
-        // Sign a token with the user's information
-        const token = signToken(user.username, user.email, user._id); // (user)
-        // Return the token and the user
-        return { token, user };
-    }),
-    saveBook: (_parent_1, _a, context_1) => __awaiter(void 0, [_parent_1, _a, context_1], void 0, function* (_parent, { book }, context) {
-        if (context.user) {
-            return User.findOneAndUpdate({ _id: context.user._id }, { $addToSet: { savedBooks: book } }, { new: true }).populate('savedBooks');
-        }
-        throw new AuthenticationError('You need to be logged in!');
-    }),
-    removeBook: (_parent_1, _a, context_1) => __awaiter(void 0, [_parent_1, _a, context_1], void 0, function* (_parent, { bookId }, context) {
-        if (context.user) {
-            return User.findOneAndUpdate({ _id: context.user._id }, { $pull: { savedBooks: { bookId } } }, { new: true });
-        }
-        throw new AuthenticationError('You need to be logged in!');
-    })
+        // addUser: async (_parent: any, { username, email, password }: { username: string, email: string, password: string }) => {
+        addUser: (_parent_1, _a) => __awaiter(void 0, [_parent_1, _a], void 0, function* (_parent, { input }) {
+            // Create a new user with the provided username, email, and password
+            const { username, email, password } = input;
+            const user = yield User.create({ username, email, password });
+            // Sign a token with the user's information
+            const token = signToken(user.username, user.email, user._id); // (user)
+            // Return the token and the user
+            return { token, user };
+        }),
+        saveBook: (_parent_1, _a, context_1) => __awaiter(void 0, [_parent_1, _a, context_1], void 0, function* (_parent, { book }, context) {
+            if (context.user) {
+                return User.findOneAndUpdate({ _id: context.user._id }, { $addToSet: { savedBooks: book } }, { new: true }).populate('savedBooks');
+            }
+            throw new AuthenticationError('You need to be logged in!');
+        }),
+        removeBook: (_parent_1, _a, context_1) => __awaiter(void 0, [_parent_1, _a, context_1], void 0, function* (_parent, { bookId }, context) {
+            if (context.user) {
+                return User.findOneAndUpdate({ _id: context.user._id }, { $pull: { savedBooks: { bookId } } }, { new: true });
+            }
+            throw new AuthenticationError('You need to be logged in!');
+        })
+    }
 };
 export default resolvers;

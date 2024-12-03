@@ -11,18 +11,27 @@ import { REMOVE_BOOK } from '../utils/mutations';
 
   const SavedBooks = () => {
     const { loading, error, data } = useQuery(GET_ME);
-    // const [userData, setUserData] = useState<User | null>(null);
-    const [removeBook] = useMutation(REMOVE_BOOK, {
-      refetchQueries: [{ query: GET_ME }],
-    });
-
-    const userData = data?.me || null; // Use optional chaining to access the `me` property on `data`
+    useEffect(() => {
+      if (data) {
+        setUserData(data.me);
+      }
+    }, [data]);
+    const [userData, setUserData] = useState<User | null>(null);
+  
+    useEffect(() => {
+      if (data) {
+        setUserData(data.me);
+      }
+    }, [data]);
     
     // The useQuery hook automatically executes when the component mounts and will re-fetch data when necessary, making the useEffect hook unnecessary in this case.
 
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
   const handleDeleteBook = async (bookId: string) => {
       const token = Auth.loggedIn() ? Auth.getToken() : null;
+      const [removeBook] = useMutation(REMOVE_BOOK, {
+        refetchQueries: [{ query: GET_ME }],
+      });
 
       if (!token) {
         return false;

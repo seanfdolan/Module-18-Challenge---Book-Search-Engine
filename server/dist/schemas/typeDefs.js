@@ -21,6 +21,8 @@ const typeDefs = `#graphql
 
   type User {
     _id: ID
+    id: ID
+    name: String
     username: String
     email: String
     bookCount: Int

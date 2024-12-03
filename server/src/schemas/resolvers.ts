@@ -13,7 +13,7 @@ interface UserArgs {  // UserArgs is the same as ProfileArgs
   bookCount: number;
   savedBooks: string[];
 }
-  
+
 // interface BookArgs {  // BookArgs is the same as SkillArgs. Should I keep it as BookArgs? or Delete it?
 //   bookId: string;
 //   authors: string[];
@@ -22,7 +22,6 @@ interface UserArgs {  // UserArgs is the same as ProfileArgs
 //   image: string;
 //   link: string;
 // }
-
 
 interface LoginUserArgs {
   email: string;
@@ -59,14 +58,24 @@ const resolvers = {
       // If the user is not authenticated, throw an AuthenticationError
       throw new AuthenticationError('Could not authenticate user.');
     },
+    
   },
 
-    users: async () => {
-      return await User.find({});
-    },
-    user: async (_parent: any, { username }: UserArgs) => {
-      return User.findOne({ username }).populate('savedBooks');
-    },
+  // users: () => [{ id: "1", name: "John Doe", email: "john@example.com" }],
+
+  // user: async (_parent: any, { username }: UserArgs) => {
+  //   return User.findOne({ username }).populate('savedBooks');
+  // }
+
+    // users: async () => {
+    //   return [{ id: "1", name: "Test User", email: "test@example.com" }];
+    // }
+
+    // users: async () => await User.find({}),
+    // users: async () => {
+    //   return await User.find({});
+    // },
+  
     
     // users: async () => {
     //   try {
@@ -81,6 +90,12 @@ const resolvers = {
     //       return await User.findOne({username: context.user.username}).populate('savedBooks');
     //     }
     //   },
+
+  //   users: () => __awaiter(void 0, void 0, void 0, function* () {
+  //     return yield User.find({});
+  // })
+  
+
 
   Mutation: {
     // login: async (_parent: any, { email, password }: { email: string, password: string}) => {
@@ -107,7 +122,7 @@ const resolvers = {
       // Return the token and the user
       return { token, user };
     },
-  },
+  
   
     // addUser: async (_parent: any, { username, email, password }: { username: string, email: string, password: string }) => {
     addUser: async (_parent: any, { input }: AddUserArgs) => {  
@@ -141,6 +156,8 @@ const resolvers = {
       }
       throw new AuthenticationError('You need to be logged in!');
     }
-  };
+  }
+
+};
 
 export default resolvers;

@@ -56,7 +56,7 @@ import db from './config/connection.js';
 
 import routes from './routes/index.js';
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3007;
 const app = express();
 
 const server = new ApolloServer({
@@ -91,8 +91,8 @@ const startApolloServer = async () => {
   });
 };
 
-db.once('open', () => {
-  app.listen(PORT, () => console.log(`Now listening on localhost: ${PORT}`));
-});
+// db.once('open', () => {
+//   app.listen(PORT, () => console.log(`Now listening on localhost: ${PORT}`));
+// });
 
 startApolloServer();

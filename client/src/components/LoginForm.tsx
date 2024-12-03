@@ -7,11 +7,29 @@ import { loginUser } from '../utils/API';
 import Auth from '../utils/auth';
 import type { User } from '../models/User';
 
+import { LOGIN_USER } from '../utils/mutations';
+import { useEffect } from 'react';
+import { useMutation } from '@apollo/client';
+
 // biome-ignore lint/correctness/noEmptyPattern: <explanation>
 const LoginForm = ({}: { handleModalClose: () => void }) => {
   const [userFormData, setUserFormData] = useState<User>({ username: '', email: '', password: '', savedBooks: [] });
   const [validated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+
+
+  const [login, { error }] = useMutation(LOGIN_USER);
+
+  useEffect(() => {
+    if (error) {
+      setShowAlert(true);
+    } else {
+      setShowAlert(false);
+    }
+  }, [error]);
+  
+  const [loginUser] = useMutation(LOGIN_USER);
+  
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -29,13 +47,13 @@ const LoginForm = ({}: { handleModalClose: () => void }) => {
     }
 
     try {
-      const response = await loginUser(userFormData);
+      const { data } = await login({ variables: { ...userFormData } });
 
-      if (!response.ok) {
-        throw new Error('something went wrong!');
-      }
+      // if (!response.ok) {
+      //   throw new Error('something went wrong!');
+      // }
 
-      const { token } = await response.json();
+      const token = data.login.token;
       Auth.login(token);
     } catch (err) {
       console.error(err);
@@ -93,3 +111,5 @@ const LoginForm = ({}: { handleModalClose: () => void }) => {
 };
 
 export default LoginForm;
+
+

@@ -17,14 +17,29 @@ import { gql } from '@apollo/client';
 export const GET_ME = gql`
     query Me {
         me {
-            id: string; // assuming id is a string, change if necessary
-            name: string;
-            email: string;
-
-            # id
-            # name
-            # email
+            id: string
+            name: string
+            email: string
             
         }
     }
 `;
+
+// query Me {
+//     me {
+//       _id
+//       id
+//       name
+//       username
+//       email
+//       bookCount
+//       savedBooks {
+//         bookId
+//         authors
+//         description
+//         title
+//         image
+//         link
+//       }
+//     }
+//   }
