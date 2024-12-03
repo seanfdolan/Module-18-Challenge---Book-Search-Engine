@@ -46,7 +46,7 @@
     "skipLibCheck": true,
 
     "module": "ESNext",
-    "target": "ES2015",
+    "target": "ES2020",
     "outDir": "./dist",
     "moduleResolution": "Node",
     "esModuleInterop": true,
