@@ -64,3 +64,4 @@ export const deleteBook = (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
     return res.json(updatedUser);
 });
+//# sourceMappingURL=user-controller.js.map

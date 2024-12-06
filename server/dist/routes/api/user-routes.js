@@ -8,4 +8,8 @@ router.route('/').post(createUser).put(authenticateToken, saveBook);
 router.route('/login').post(login);
 router.route('/me').get(authenticateToken, getSingleUser);
 router.route('/books/:bookId').delete(authenticateToken, deleteBook);
-export default router;
+// export default router;
+const userRoutes = router;
+export { userRoutes };
+export default userRoutes;
+//# sourceMappingURL=user-routes.js.map

@@ -29,6 +29,10 @@ const userSchema = new Schema({
     },
     // set savedBooks to be an array of data that adheres to the bookSchema
     savedBooks: [bookSchema],
+    // savedBooks: [{
+    //   type: Schema.Types.ObjectId,
+    //   ref: 'Book',
+    // }],
 }, 
 // set this to use virtual below
 {
@@ -58,3 +62,4 @@ userSchema.virtual('bookCount').get(function () {
 });
 const User = model('User', userSchema);
 export default User;
+//# sourceMappingURL=User.js.map

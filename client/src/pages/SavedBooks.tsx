@@ -1,37 +1,34 @@
-import { useState, useEffect } from 'react';
+// import { useState, useEffect } from 'react';
 import { Container, Card, Button, Row, Col } from 'react-bootstrap';
 import { useQuery, useMutation } from '@apollo/client';
-import { getMe, removeBook } from '../utils/API';
+// import { getMe, removeBook } from '../utils/API';
 import { GET_ME } from '../utils/queries';
 import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
 import type { User } from '../models/User';
 import { REMOVE_BOOK } from '../utils/mutations';
+import { useParams } from 'react-router-dom';
 
+import React from 'react';
 
-  const SavedBooks = () => {
-    const { loading, error, data } = useQuery(GET_ME);
-    useEffect(() => {
-      if (data) {
-        setUserData(data.me);
-      }
-    }, [data]);
-    const [userData, setUserData] = useState<User | null>(null);
-  
-    useEffect(() => {
-      if (data) {
-        setUserData(data.me);
-      }
-    }, [data]);
-    
+const SavedBooks: React.FC = () => {
+  const { username: userParam } = useParams();
+  const { loading, error, data } = useQuery(GET_ME);
+  const [removeBook] = useMutation(REMOVE_BOOK, {
+    refetchQueries: [{ query: GET_ME, variables: { username: userParam } }],
+  });
+
+  console.log('Query data:', data);
+
+  const userData: User =data?.me || data?.user || {};
+  console.log('User data:', userData);
+  console.log('Saved books:', userData.savedBooks);
+
     // The useQuery hook automatically executes when the component mounts and will re-fetch data when necessary, making the useEffect hook unnecessary in this case.
 
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
   const handleDeleteBook = async (bookId: string) => {
       const token = Auth.loggedIn() ? Auth.getToken() : null;
-      const [removeBook] = useMutation(REMOVE_BOOK, {
-        refetchQueries: [{ query: GET_ME }],
-      });
 
       if (!token) {
         return false;
@@ -44,7 +41,7 @@ import { REMOVE_BOOK } from '../utils/mutations';
 
         removeBookId(bookId);
       } catch (err) {
-              console.error(err);
+        console.error(err);
             }
         };
 
@@ -55,7 +52,8 @@ import { REMOVE_BOOK } from '../utils/mutations';
   }
   if (error) {
     console.error(error);
-    return <h2>Something went wrong!</h2>;
+    // return <h2>Something went wrong!</h2>;
+    return <h2>Error: {error.message}</h2>
   }
 
   return (
@@ -78,7 +76,8 @@ import { REMOVE_BOOK } from '../utils/mutations';
             : 'You have no saved books!'}
         </h2>
         <Row>
-          {userData?.savedBooks?.map((book: { bookId: string; image?: string; title: string; authors: string[]; description: string }) => {
+          {/* {userData?.savedBooks?.map((book: { bookId: string; image?: string; title: string; authors: string[]; description: string }) => { */}
+          {userData.savedBooks.map((book) => {    //changed to check for savedBooks
             return (
               <Col md='4'>
                 <Card key={book.bookId} border='dark'>

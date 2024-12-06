@@ -3,33 +3,24 @@ import { useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 
-import { loginUser } from '../utils/API';
 import Auth from '../utils/auth';
 import type { User } from '../models/User';
 
 import { LOGIN_USER } from '../utils/mutations';
-import { useEffect } from 'react';
 import { useMutation } from '@apollo/client';
+
+// interface LoginFormProps {
+//   handleModalClose: () => void;
+// }
+
+// const LoginForm: React.FC<LoginFormProps> = ({ handleModalClose }) => {
 
 // biome-ignore lint/correctness/noEmptyPattern: <explanation>
 const LoginForm = ({}: { handleModalClose: () => void }) => {
   const [userFormData, setUserFormData] = useState<User>({ username: '', email: '', password: '', savedBooks: [] });
   const [validated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-
-
-  const [login, { error }] = useMutation(LOGIN_USER);
-
-  useEffect(() => {
-    if (error) {
-      setShowAlert(true);
-    } else {
-      setShowAlert(false);
-    }
-  }, [error]);
-  
-  const [loginUser] = useMutation(LOGIN_USER);
-  
+  const [login] = useMutation(LOGIN_USER);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -47,18 +38,19 @@ const LoginForm = ({}: { handleModalClose: () => void }) => {
     }
 
     try {
-      const { data } = await login({ variables: { ...userFormData } });
+      const { data } = await login({
+        variables: { ...userFormData },
+      });
 
-      // if (!response.ok) {
-      //   throw new Error('something went wrong!');
-      // }
-
-      const token = data.login.token;
-      Auth.login(token);
+      if (data && data.login && data.login.token) {
+        Auth.login(data.login.token);
+      } else {
+        throw new Error('Login failed');
+      }
     } catch (err) {
       console.error(err);
       setShowAlert(true);
-    }
+    }  
 
     setUserFormData({
       username: '',
@@ -111,5 +103,3 @@ const LoginForm = ({}: { handleModalClose: () => void }) => {
 };
 
 export default LoginForm;
-
-

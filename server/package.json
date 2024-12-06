@@ -1,22 +1,23 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "",
-  "main": "server/server.js",
+  "description": "Google Books Search Engine",
+  "main": "dist/server.js",
   "type": "module",
+  "module": "es2020",
   "scripts": {
+    "start": "node dist/server.js",
+    "dev": "nodemon src/server.ts",
+    "watch": "tsc -w",
     "build": "tsc",
-    "start": "node server/dist/server.js",
-    "dev": "nodemon server/server.ts",
-    "watch": "nodemon dist/server.js",
+    "clean": "rifraf dist/*",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "seanfdolan",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^4.0.1",
-    "brcypt": "^1.0.1",
     "express": "^4.19.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^8.0.0"
@@ -28,6 +29,7 @@
     "@types/node": "^20.14.8",
     "dotenv": "^16.4.5",
     "nodemon": "^3.1.0",
+    "rifraf": "^5.0.0",
     "typescript": "^5.4.5"
   }
 }

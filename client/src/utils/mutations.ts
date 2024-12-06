@@ -6,9 +6,10 @@ export const LOGIN_USER = gql`
     loginUser(email: $email, password: $password) {
       token  
       user {
-        id
-        name
-        email
+        _id
+        username
+        # name
+        # email
         # Add other user fields if necessary
       }
     }
@@ -17,35 +18,45 @@ export const LOGIN_USER = gql`
 
 // Define the ADD_USER mutation
 export const ADD_USER = gql`
-  mutation addUser($username: String!, $email: String!, $password: String!) {
-    addUser(username: $username, email: $email, password: $password) {
+  # mutation addUser($username: String!, $email: String!, $password: String!) {
+  #   addUser(username: $username, email: $email, password: $password) {
+  mutation addUser($input: UserInput!) {
+    addUser(input: $input) {
       token
       user {
-        id
-        name
-        email
+        _id
+        username
+      }
+        # name
+        # email
         # Add other user fields if necessary
       }
     }
-  }
 `;
 
 // Define the SAVE_BOOK mutation
 export const SAVE_BOOK = gql`
-  mutation saveBook($author: String!, $description: String!, $title: String!, $bookId: String!, $image: String!, $link: String!) {  // $book: BookInput!
+  # mutation saveBook($author: String!, $description: String!, $title: String!, $bookId: String!, $image: String!, $link: String!) {  // $book: BookInput!
+  mutation saveBook($input: BookInput!) {
     saveBook(book: $book) {
-      _id        
-      username
-      email
-      bookCount
-      savedBooks {
-        bookId
-        title
-        description
-        authors
-        image
-        link  
-      }   
+      bookId
+      title
+      authors
+      description
+      image
+      link
+      # _id        
+      # username
+      # email
+      # bookCount
+      # savedBooks {
+      #   bookId
+      #   title
+      #   description
+      #   authors
+      #   image
+      #   link  
+      # }   
       # Add other user fields if necessary
     }
   }
@@ -53,20 +64,26 @@ export const SAVE_BOOK = gql`
 
 // Define the REMOVE_BOOK mutation
 export const REMOVE_BOOK = gql`
-  mutation removeBook($bookId: String!) {
+  mutation removeBook($bookId: ID!) {  
     removeBook(bookId: $bookId) {
-      _id
-      username
-      email
-      bookCount
-      savedBooks {
-        bookId
-        title
-        description
-        authors
-        image
-        link
-            }
+      bookId
+      title
+      authors
+      description
+      image
+      link
+      # _id
+      # username
+      # email
+      # bookCount
+      # savedBooks {
+      #   bookId
+      #   title
+      #   description
+      #   authors
+      #   image
+      #   link
+      #       }
       # Add other user fields if necessary
     }
   }

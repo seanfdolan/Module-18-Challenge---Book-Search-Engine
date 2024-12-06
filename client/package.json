@@ -3,11 +3,18 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+ 
+    "compilerOptions": {
+      "module": "es2020"
+    },
+  
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:client": "cd client && tsc",
+    "build:server": "cd server && tsc",
+    "build": "npm run build:client && npm run build:server"
   },
   "dependencies": {
     "bootstrap": "^5.2.3",
